@@ -3,15 +3,59 @@
 [README](https://github.com/ehang-io/nps/blob/master/README.md)|[中文文档](https://github.com/ehang-io/nps/blob/master/README_zh.md)
 
 # 说明
-由于nps已经有一年多的时间没有更新了，存留了不少bug和未完善的功能。
+由于nps已经有二年多的时间没有更新了，存留了不少bug和未完善的功能。
 
 此版本基于 nps 0.26.10的基础上二次开发而来。
 
 ***DockerHub***： [NPS](https://hub.docker.com/r/yisier1/nps) [NPC](https://hub.docker.com/r/yisier1/npc)
 
+# 交流群
+聊天灌水QQ群：770569342,619833483(已满)
+
+# 公益云内网穿透
+https://natnps.com/
+公益NPS内网穿透服务，长期免费，6M带宽，3条隧道，不限流量，欢迎来嫖，自行注册账号。
+
+# 特价云服务器  
+国内BGP，游戏开服，2核 2G 15M上行 25元/月，[专属连接，首月5折](https://www.rainyun.com/MjY0MzY1_)
+
+  
+# 捐赠
+![image](image/new/payCode.png)
 
 
-## 更新日志
+
+## 更新日志  
+- 2024-06-01  v0.26.19  
+  - golang 版本升级到 1.22.
+  - 增加自动https，自动将http 重定向（301）到 https.  
+  - 客户端命令行方式启动支持多个隧道ID，使用逗号拼接，示例：`npc -server=xxx:8024 -vkey=ytkpyr0er676m0r7,iwnbjfbvygvzyzzt` .
+  - 移除 nps.conf 参数 `https_just_proxy` , 调整 https 处理逻辑，如果上传了 https 证书，则由nps负责SSL (此方式可以获取真实IP)，
+      否则走端口转发模式（使用本地证书,nps 获取不到真实IP）， 如下图所示。    
+    ![image](image/new/https.png)
+
+
+
+- 2024-02-27  v0.26.18  
+  ***新增***：nps.conf 新增 `tls_bridge_port=8025` 参数，当 `tls_enable=true` 时，nps 会监听8025端口，作为 tls 的连接端口。  
+             客户端可以选择连接 tls 端口或者非 tls 端口： `npc.exe  -server=xxx:8024 -vkey=xxx` 或 `npc.exe  -server=xxx:8025 -vkey=xxx -tls_enable=true`
+  
+  
+- 2024-01-31  v0.26.17  
+  ***说明***：考虑到 npc 历史版本客户端众多，版本号不同旧版本客户端无法连接，为了兼容，仓库版本号将继续沿用 0.26.xx
+
+
+- 2024-01-02  v0.27.01  (已作废，功能移动到v0.26.17 版本)  
+  ***新增***：tls 流量加密，(客户端忽略证书校验，谨慎使用，客户端与服务端需要同时开启，或同时关闭)，使用方式：   
+             服务端：nps.conf `tls_enable=true`;    
+             客户端：npc.conf `tls_enable=true` 或者 `npc.exe  -server=xxx -vkey=xxx -tls_enable=true`  
+
+  
+- 2023-06-01  v0.26.16  
+  ***修复***：https 流量不统计 Bug 修复。  
+  ***新增***：新增全局黑名单IP，用于防止被肉鸡扫描端口或被恶意攻击。  
+  ***新增***：新增客户端上次在线时间。
+
 
 - 2023-02-24  v0.26.15  
   ***修复***：更新程序 url 更改到当前仓库中   

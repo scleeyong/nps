@@ -47,6 +47,11 @@ func (s *UdpModeServer) Start() error {
 			continue
 		}
 
+		// 判断访问地址是否在全局黑名单内
+		if IsGlobalBlackIp(addr.String()) {
+			break
+		}
+
 		// 判断访问地址是否在黑名单内
 		if common.IsBlackIp(addr.String(), s.task.Client.VerifyKey, s.task.Client.BlackIpList) {
 			break
@@ -94,7 +99,7 @@ func (s *UdpModeServer) process(addr *net.UDPAddr, data []byte) {
 
 			s.task.Client.Flow.Add(int64(len(data)), int64(len(data)))
 			for {
-				clientConn.SetReadDeadline(time.Now().Add(time.Minute * 10))
+				clientConn.SetReadDeadline(time.Now().Add(time.Duration(60) * time.Second))
 				if n, err := target.Read(buf); err != nil {
 					s.addrMap.Delete(addr.String())
 					logs.Warn(err)
@@ -107,10 +112,10 @@ func (s *UdpModeServer) process(addr *net.UDPAddr, data []byte) {
 					}
 					s.task.Client.Flow.Add(int64(n), int64(n))
 				}
-				if err := s.CheckFlowAndConnNum(s.task.Client); err != nil {
-					logs.Warn("client id %d, task id %d,error %s, when udp connection", s.task.Client.Id, s.task.Id, err.Error())
-					return
-				}
+				//if err := s.CheckFlowAndConnNum(s.task.Client); err != nil {
+				//	logs.Warn("client id %d, task id %d,error %s, when udp connection", s.task.Client.Id, s.task.Id, err.Error())
+				//	return
+				//}
 			}
 		}
 	}

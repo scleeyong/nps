@@ -288,6 +288,7 @@ func dealClientData() {
 		v := value.(*file.Client)
 		if vv, ok := Bridge.Client.Load(v.Id); ok {
 			v.IsConnect = true
+			v.LastOnlineTime = time.Now().Format("2006-01-02 15:04:05")
 			v.Version = vv.(*bridge.Client).Version
 		} else {
 			v.IsConnect = false
@@ -469,6 +470,7 @@ func flowSession(m time.Duration) {
 			file.GetDb().JsonDb.StoreHostToJsonFile()
 			file.GetDb().JsonDb.StoreTasksToJsonFile()
 			file.GetDb().JsonDb.StoreClientsToJsonFile()
+			file.GetDb().JsonDb.StoreGlobalToJsonFile()
 		}
 	}
 }

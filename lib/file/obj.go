@@ -52,6 +52,7 @@ type Client struct {
 	MaxTunnelNum    int
 	Version         string
 	BlackIpList     []string
+	LastOnlineTime  string
 	sync.RWMutex
 }
 
@@ -173,6 +174,7 @@ type Host struct {
 	KeyFilePath  string
 	NoStore      bool
 	IsClose      bool
+	AutoHttps    bool // 自动https
 	Flow         *Flow
 	Client       *Client
 	Target       *Target //目标
@@ -209,4 +211,9 @@ func (s *Target) GetRandomTarget() (string, error) {
 	}
 	s.nowIndex++
 	return s.TargetArr[s.nowIndex], nil
+}
+
+type Glob struct {
+	BlackIpList []string
+	sync.RWMutex
 }
